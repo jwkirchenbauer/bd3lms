@@ -619,6 +619,8 @@ def get_dataloaders(config, tokenizer, skip_train=False,
       streaming=config.data.streaming,
       revision=config.data.get("valid_revision", None))
 
+  print(f"Train/val dataloader workers config.loader.num_workers={config.loader.num_workers}")
+
   if skip_train:
     train_loader = None
   else:
