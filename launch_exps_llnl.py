@@ -17,15 +17,15 @@ RCCL_INSTALL_DIR = (
 ROCM_VERSION = "6.3.0"
 RCCL_CFG = "rdzv-lbann"
 
-QOS = "pdebug"
-# QOS = "pbatch"
+# QOS = "pdebug"
+QOS = "pbatch"
 
-BANK = "guests"
-# BANK = "effml"
+# BANK = "guests"
+BANK = "effml"
 
 # TIME_LIMIT = 29
-TIME_LIMIT = 59
-# TIME_LIMIT = 119
+# TIME_LIMIT = 59
+TIME_LIMIT = 360
 
 BASE_OUT_DIR = f"/p/vast1/kirchenb/diffusion-root/bd3lms/outputs"
 
@@ -45,7 +45,11 @@ BLOCK_SIZE = 4
 # BLOCK_SIZE = 8
 # BLOCK_SIZE = 16
 
-run_name = f"bd3lm-owt-block_size{BLOCK_SIZE}_N{NODES}n{NODES*GPN}"
+# PRETRAINED_CHECKPOINT="null"
+PRETRAINED_CHECKPOINT="kuleshov-group/bd3lm-owt-block_size1024-pretrain"
+
+# run_name = f"bd3lm-owt-block_size{BLOCK_SIZE}_N{NODES}n{NODES*GPN}"
+run_name = f"bd3lm-owt-pretrained-block_size{BLOCK_SIZE}_N{NODES}n{NODES*GPN}"
 
 # Cfgs
 exp_list = [
@@ -53,8 +57,8 @@ exp_list = [
 python -u main.py \
     loader.global_batch_size=512 \
     loader.eval_global_batch_size=512 \
-    loader.batch_size=16 \
-    loader.eval_batch_size=16 \
+    loader.batch_size=32 \
+    loader.eval_batch_size=32 \
     model=small \
     algo=bd3lm \
     algo.clip_search_widths=[0.5,0.6,0.7,0.8,0.9] \
@@ -68,7 +72,7 @@ python -u main.py \
     mode=train \
     model.attn_backend=flex \
     training.resample=True \
-    training.from_pretrained=null
+    training.from_pretrained={PRETRAINED_CHECKPOINT}
 """, run_name]
 ]
 
